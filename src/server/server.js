@@ -1,4 +1,4 @@
-const blah = 'whoa';
+const blah = 'hello world';
 console.log(`hello ${blah}`);
 
 const obj = {hey: 1};
