@@ -1,0 +1,12 @@
+{
+  "name": "cards",
+  "version": "1.0.0",
+  "description": "learning fullstack react with a cards against humanity clone",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server.js",
+    "test": "node ./tests.js"
+  },
+  "author": "Raul Gutierrez",
+  "license": "ISC"
+}
