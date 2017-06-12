@@ -2,11 +2,17 @@ import gulp from 'gulp';
 import path from 'path';
 import rimraf from 'rimraf';
 import child_process from 'child_process';
+import webpackConfig from './webpack.config.js';
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
 
 const $ = require('gulp-load-plugins')();
 
+// ----------------------
+// Server
+
 gulp.task('server:clean', cb => {
-  rimraf('./build', () => cb())
+  rimraf('./build', () => cb());
 });
 
 gulp.task('server:build',
@@ -75,7 +81,7 @@ function runServer() {
     script: './server.js',
     watch: 'build',
     ignore: ['**/__tests']
-  })
+  });
 }
 
 function testServer(cb) {
@@ -88,12 +94,75 @@ function testServer(cb) {
     } else {
       cb();
     }
-  })
+  });
 }
 
 function runServerTests() {
   return $.nodemon({
     script: './tests.js',
     watch: 'build'
-  })
+  });
 }
+
+// ----------------------
+// Client
+
+const consoleStats = {
+  colors: true,
+  exclude: ['node_modules'],
+  chunks: false,
+  assets: false,
+  timings: true,
+  modules: false,
+  hash: false,
+  version: false
+};
+
+gulp.task('client:clean', cb => {
+  rimraf('./public/build', () => cb());
+});
+
+gulp.task(
+  'client:build',
+  gulp.series(
+    'client:clean',
+    buildClient
+  ));
+
+gulp.task(
+  'client:dev',
+  gulp.series(
+    'client:clean',
+    watchClient
+  ));
+
+function buildClient (cb) {
+  webpack(webpackConfig, (err, stats) => {
+    if (err) {
+      cb(err);
+      return;
+    }
+
+    console.log(stats.toString(consoleStats));
+    cb();
+  });
+}
+
+function watchClient () {
+  const compiler = webpack(webpackConfig);
+  const server = new WebpackDevServer(compiler, {
+    publicPath: '/build/',
+    hot: true,
+    stats: consoleStats,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+  });
+
+  server.listen(8080, () => {});
+}
+
+// ----------------------
+// Other Tasks
+gulp.task('dev', gulp.parallel('server:dev', 'client:dev'));
+gulp.task('build', gulp.parallel('server:build', 'client:build'));
