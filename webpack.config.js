@@ -4,7 +4,9 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const vendor = [
-  'lodash'
+  'lodash',
+  'react',
+  'react-dom'
 ];
 
 function createConfig (isDebug) {
@@ -35,7 +37,12 @@ function createConfig (isDebug) {
   if (isDebug) {
     //HMR
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    clientEntry.unshift('webpack-dev-server/client?http://localhost:8080/', 'webpack/hot/only-dev-server');
+    clientEntry.unshift(
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:8080/',
+      'webpack/hot/only-dev-server',
+    );
+
   } else {
     plugins.push(
       new webpack.optimize.DedupePlugin(),
