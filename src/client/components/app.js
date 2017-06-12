@@ -5,8 +5,15 @@ import React, { Component } from 'react';
 class AppContainer extends Component {
   render() {
     return (
-      <h1> Hello World! </h1>
+      <section>
+        <h1>Hello World</h1>
+        <button onClick={this._click.bind(this)}>I am a button</button>
+      </section>
     );
+  }
+
+  _click() {
+    console.log('Stuff');
   }
 }
 
