@@ -21,6 +21,8 @@
     ],
     "semi": ["error", "always"],
     "no-console": "off",
+    "no-unused-vars": "warn",
+
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
   },
