@@ -1,8 +1,10 @@
 import './lobby.scss';
-import React, { Component } from 'react';
+import React from 'react';
+import * as A from '../actions';
+import { ContainerBase } from '../lib/component';
 import Chat from './chat';
 
-class LobbyContainer extends Component {
+class LobbyContainer extends ContainerBase {
   constructor(props) {
     super(props);
 
@@ -48,12 +50,12 @@ class LobbyContainer extends Component {
   }
 }
 
-class LobbySidebar extends Component {
+class LobbySidebar extends ContainerBase {
   constructor(props) {
     super(props);
 
     this._login = () => {
-      console.log('TODO: IMPLEMENT LOGIN');
+      this.dispatch(A.dialogSet(A.DIALOG_LOGIN, true));
     };
 
     this._createGame = () => {
