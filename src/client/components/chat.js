@@ -47,10 +47,11 @@ export default class Chat extends Component {
 
   render() {
     const { messages, opSendMessage } = this.props;
+
     return(
       <section className='c-chat'>
         <ul className='messages' ref={c => this._messages = c}>
-          {messages.map(message =>
+          {messages.map((message) =>
             <li key={message.index}>
               <span className='author'>{message.name}</span>
               <span className='message'>{message.message}</span>
