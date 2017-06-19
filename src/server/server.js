@@ -1,6 +1,9 @@
 import express from 'express';
 import http from 'http';
+import path from 'path';
+import fs from 'fs';
 import { isDevelopment } from './settings';
+import { CardDatabase } from './models/cards';
 
 // Setup
 const app = express();
@@ -19,6 +22,15 @@ app.get('*', (req, res) => {
     scriptRoot
   });
 });
+
+// Services
+const cards = new CardDatabase();
+const setsPath = path.join(global.appRoot, 'data', 'sets');
+for(let file of fs.readdirSync(setsPath)) {
+  const setId = path.parse(file).name;
+  const setPath = path.join(setsPath, file);
+  cards.addSet(setId, JSON.parse(fs.readFileSync(setPath, 'utf-8')));
+}
 
 // Startup
 const port = process.env.PORT || 3000;
