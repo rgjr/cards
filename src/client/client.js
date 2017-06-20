@@ -2,6 +2,7 @@ import './client.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, browserHistory as history } from 'react-router';
+import io from 'socket.io-client';
 import { Dispatcher } from 'shared/dispatcher';
 import * as A from './actions';
 import { StoreProvider } from './lib/component';
@@ -10,11 +11,14 @@ import _ from 'lodash';
 
 // Services
 const dispatcher = new Dispatcher();
-const services = { dispatcher };
+const socket = io();
+const services = { dispatcher, socket };
 
 if (IS_DEVELOPMENT) {
   dispatcher.on('*', printAction);
 }
+
+socket.on('action', action => dispatcher.emit(action));
 
 //Stores
 const stores = createStores(services);
